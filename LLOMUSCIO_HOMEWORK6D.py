@@ -91,8 +91,9 @@ def plotting(data, debug = False, polyDeg = [1,2,3,4]):
         number_combinations = 0
     if not debug:
         fig = plt.Figure(figsize=(80, 80))
-    for column1 in data.keys():
-        for column2 in data.keys():
+    ncols = len(data.keys())
+    for i1, column1 in enumerate(data.keys()):  # add enumerate and create i1 index
+        for i2, column2 in enumerate(data.keys()):  # add enumerate and create i2 index
             if debug:
                 number_combinations += 1
                 print(column1, column2)
@@ -106,21 +107,23 @@ def plotting(data, debug = False, polyDeg = [1,2,3,4]):
                 #print("rowsize=",rowsize)
                 #print("colsize=",colsize)
 
+                loc = i1*ncols + i2 + 1
+                plt.subplot(ncols, ncols, loc)
+
                 plt.scatter(x, y)
-                plt.xlabel(column1)
-                plt.ylabel(column2)
+                # plt.xlabel(column1)
+                # plt.ylabel(column2)
                 plt.title("{0} x {1}".format(column1, column2))
 
                 for poly_order in polyDeg:
-                    coefs = np.polyfit(x, y, polyDeg)  # we also want to do this for 2, 3
+                    coefs = np.polyfit(x, y, poly_order)  # we also want to do this for 2, 3
                     f = np.poly1d(coefs)
                     #print(np.poly1d(f))
                     xs, new_line = generate_points(f, min(x), max(x))
     #               plt.plot(xs, new_line)
-                    #plt.plot(xs, new_line, color="red")
-                    xs, new_line = plt.subplots(rowsize,colsize)
+                    plt.plot(xs, new_line, color="red")
                     #Uncomment this line for the pairs plot
-                    plt.show()
+    plt.show()
     if not debug:
         # Note: I have spent no effort making it pretty, and recommend that you do :)
         plt.legend()
