@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np 
 
 #I have used the diabetes.data file as dataset
+#ce fichier est celui avec le pair plot travailler sur celui la
 
 def convert_type(element):
     # Case 2: is an emptry str, should be ignored
