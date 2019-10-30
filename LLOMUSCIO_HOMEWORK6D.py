@@ -85,10 +85,12 @@ for location, column_headings in enumerate(outer_list[0]):
     # Add data values to the corresponding columns
 
 debug = False
-if debug: #setting up the polynomial here
-    number_combinations = 0
 
-def plotting(data):
+def plotting(data, debug = False, polyDeg = [1,2,3,4]):
+    if debug:
+        number_combinations = 0
+    if not debug:
+        fig = plt.Figure(figsize=(80, 80))
     for column1 in data.keys():
         for column2 in data.keys():
             if debug:
@@ -101,23 +103,30 @@ def plotting(data):
                 y = data[column2]
                 rowsize = len(data.keys())
                 colsize = len(data.values())
-                print("rowsize=",rowsize)
-                print("colsize=",colsize)
+                #print("rowsize=",rowsize)
+                #print("colsize=",colsize)
 
                 plt.scatter(x, y)
                 plt.xlabel(column1)
                 plt.ylabel(column2)
                 plt.title("{0} x {1}".format(column1, column2))
 
-                coefs = np.polyfit(x, y, degreePoly)  # we also want to do this for 2, 3
-                f = np.poly1d(coefs)
-                #print(np.poly1d(f))
-                xs, new_line = generate_points(f, min(x), max(x))
-    #           plt.plot(xs, new_line)
-                plt.plot(xs, new_line, color="red")
-                #xs, new_line = plt.subplots(rowsize,colsize)
-                #Uncomment this line for the pairs plot
-                plt.show()
+                for poly_order in polyDeg:
+                    coefs = np.polyfit(x, y, polyDeg)  # we also want to do this for 2, 3
+                    f = np.poly1d(coefs)
+                    #print(np.poly1d(f))
+                    xs, new_line = generate_points(f, min(x), max(x))
+    #               plt.plot(xs, new_line)
+                    #plt.plot(xs, new_line, color="red")
+                    xs, new_line = plt.subplots(rowsize,colsize)
+                    #Uncomment this line for the pairs plot
+                    plt.show()
+    if not debug:
+        # Note: I have spent no effort making it pretty, and recommend that you do :)
+        plt.legend()
+        # plt.tight_layout()
+        # plt.show()
+        plt.savefig("./my_pairs_plot.png")
 
 plotting(our_dictionary)
 #plotting(different_dictionary)
