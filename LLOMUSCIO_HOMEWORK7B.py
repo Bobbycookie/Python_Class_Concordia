@@ -49,7 +49,9 @@ def generate_points(coefs, min_val, max_val):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('fileA')
+parser.add_argument("--plot", type=str, help="type plot to print a plot")
 args = parser.parse_args()
+
 rows = []
 
 with open(args.fileA) as input_f: 
@@ -82,14 +84,13 @@ for location, column_headings in enumerate(outer_list[0]):
 
 debug = False
 
-def main()
-
 def plotting(data, debug = False, polyDeg = [1,2,3,4]):
     if debug:
         number_combinations = 0
     if not debug:
-        fig = plt.Figure(figsize=(80, 80))
+        fig, ax = plt.subplots(figsize=(100, 100))
     ncols = len(data.keys())
+    #fig = plt.Figure(figsize=(10, 10))
     for i1, column1 in enumerate(data.keys()):  # add enumerate and create i1 index
         for i2, column2 in enumerate(data.keys()):  # add enumerate and create i2 index
             if debug:
@@ -100,33 +101,30 @@ def plotting(data, debug = False, polyDeg = [1,2,3,4]):
             else:
                 x = data[column1]
                 y = data[column2]
-                rowsize = len(data.keys())
-                colsize = len(data.values())
+                #rowsize = len(data.keys())
+                #colsize = len(data.values())
                 #print("rowsize=",rowsize)
                 #print("colsize=",colsize)
 
                 loc = i1*ncols + i2 + 1
                 plt.subplot(ncols, ncols, loc)
-
                 plt.scatter(x, y)
-                # plt.xlabel(column1)
-                # plt.ylabel(column2)
-                plt.title("{0} x {1}".format(column1, column2))
+                #plt.title("{0} x {1}".format(column1, column2))
 
                 for poly_order in polyDeg:
                     coefs = np.polyfit(x, y, poly_order)  # we also want to do this for 2, 3
                     f = np.poly1d(coefs)
-                    #print(np.poly1d(f))
                     xs, new_line = generate_points(f, min(x), max(x))
     #               plt.plot(xs, new_line)
                     plt.plot(xs, new_line, color="red")
                     #Uncomment this line for the pairs plot
+                    
     
     if not debug:
         # Note: I have spent no effort making it pretty, and recommend that you do :)
         #plt.show()
         plt.legend()
-        # plt.tight_layout()
+        #ax.tight_layout()
         # plt.show()
         plt.savefig("./my_pairs_plot.png")
 
@@ -143,3 +141,6 @@ with open("myfile.csv", "w") as myCSV:
 #print(our_dictionary)
 #split each string in list to get a lis of list and I use the function checkdelim to see which delimiter is used
 #parser.add_argument('fileA', type=argparse.FileType('r'))
+# plt.xlabel(column1)
+# plt.ylabel(column2)
+#print(np.poly1d(f))
