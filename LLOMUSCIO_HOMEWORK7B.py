@@ -47,44 +47,7 @@ def generate_points(coefs, min_val, max_val):
     xs = np.arange(min_val, max_val, (max_val-min_val)/100)
     return xs, np.polyval(coefs, xs)
 
-parser = argparse.ArgumentParser()
-parser.add_argument('fileA')
-parser.add_argument("--plot", type=str, help="type plot to print a plot")
-args = parser.parse_args()
-
-rows = []
-
-with open(args.fileA) as input_f: 
-    rows = input_f.read()
-    rows_1 = rows.split("\n")
-
-outer_list = []
-for row in rows_1:
-    row_list = []
-    for element in row.replace(" ",",").replace("  ",",").split(","):
-        new_element = convert_type(element)
-        if new_element is not None:
-            row_list.append(new_element)
-            # row_list += [new_element]   # equiv. to the above
-        #print(element, end="\t")
-        #print(new_element, type(new_element))
-    #print(row_list)
-
-    if len(row_list) > 0:
-        outer_list += [row_list]
-
-our_dictionary = {}
-
-for location, column_headings in enumerate(outer_list[0]):
-    print(column_headings)
-    our_dictionary[column_headings] = list()  # equiv. to []
-    for row in outer_list[1:]:
-        our_dictionary[column_headings] += [row[location]]
-    # Add data values to the corresponding columns
-
-debug = False
-
-def plotting(data, debug = False, polyDeg = [1,2,3,4]):
+def plotting(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
     if debug:
         number_combinations = 0
     if not debug:
@@ -125,10 +88,53 @@ def plotting(data, debug = False, polyDeg = [1,2,3,4]):
         #plt.show()
         plt.legend()
         #ax.tight_layout()
-        # plt.show()
+        #plt.show()
         plt.savefig("./my_pairs_plot.png")
 
-plotting(our_dictionary)
+#plotting(our_dictionary)
+
+parser = argparse.ArgumentParser()
+parser.add_argument('fileA')
+parser.add_argument('-p', '--pplot', action="store_true",
+                        help="only prints start of file")
+#parser.add_argument("--plot", type=str, help="type plot to print a plot")
+args = parser.parse_args()
+
+rows = []
+
+with open(args.fileA) as input_f: 
+    rows = input_f.read()
+    rows_1 = rows.split("\n")
+
+outer_list = []
+for row in rows_1:
+    row_list = []
+    for element in row.replace(" ",",").replace("  ",",").split(","):
+        new_element = convert_type(element)
+        if new_element is not None:
+            row_list.append(new_element)
+            # row_list += [new_element]   # equiv. to the above
+        #print(element, end="\t")
+        #print(new_element, type(new_element))
+    #print(row_list)
+
+    if len(row_list) > 0:
+        outer_list += [row_list]
+
+our_dictionary = {}
+
+for location, column_headings in enumerate(outer_list[0]):
+    print(column_headings)
+    our_dictionary[column_headings] = list()  # equiv. to []
+    for row in outer_list[1:]:
+        our_dictionary[column_headings] += [row[location]]
+
+print (our_dictionary)
+    # Add data values to the corresponding columns
+
+debug = False
+
+plotting(our_dictionary,pplot=args.pplot)
 
 with open("myfile.csv", "w") as myCSV:
     w = csv.DictWriter(myCSV, our_dictionary.keys())
