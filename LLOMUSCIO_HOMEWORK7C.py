@@ -86,7 +86,9 @@ def plotting_pair(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
         plt.legend()
         plt.savefig("./my_pairs_plot.png")
 
-def plot_regular(data, debug = False,rplot = False, polyDeg = [1,2,3,4]):
+def plot_regular(data, debug = False,rplot = False, polydeg = 0):
+    degpoly = int(input("Enter your degree: "))
+    polydeg = degpoly
     if debug:
         number_combinations = 0
     for column1 in our_dictionary.keys():
@@ -108,7 +110,7 @@ def plot_regular(data, debug = False,rplot = False, polyDeg = [1,2,3,4]):
                 plt.ylabel(column2)
                 plt.title("{0} x {1}".format(column1, column2))
 
-                coefs = np.polyfit(x, y, polyDeg)  # we also want to do this for 2, 3
+                coefs = np.polyfit(x, y, polydeg)  # we also want to do this for 2, 3
                 f = np.poly1d(coefs)
                 xs, new_line = generate_points(f, min(x), max(x))
                 plt.plot(xs, new_line, color="red")
@@ -159,7 +161,11 @@ print (our_dictionary)
     # Add data values to the corresponding columns
 
 debug = False
-
+print(our_dictionary.keys())
+testKeyA = input("testKeyA= ",)
+testKeyB = input("testKeyB= ",)
+print("testA ", our_dictionary[testKeyA])
+print("testB ", our_dictionary[testKeyB])
 
 if args.pplot == True:
     print ("pplot est printed)")
@@ -177,6 +183,8 @@ with open("myfile.csv", "w") as myCSV:
     w = csv.DictWriter(myCSV, our_dictionary.keys())
     w.writeheader()
     w.writerow(our_dictionary)
+
+
 
 ###########################################################
 #unused code
