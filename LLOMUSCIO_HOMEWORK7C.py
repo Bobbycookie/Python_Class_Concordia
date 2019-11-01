@@ -81,8 +81,7 @@ def plotting_pair(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
     #               plt.plot(xs, new_line)
                     plt.plot(xs, new_line, color="red")
                     #Uncomment this line for the pairs plot
-                    #plt.show()
-                       
+                    #plt.show()                
     if not debug:
         plt.legend()
         plt.savefig("./my_pairs_plot.png")
@@ -104,19 +103,17 @@ def plot_regular(data, debug = False,rplot = False, polyDeg = [1,2,3,4]):
                 colsize = len(our_dictionary.values())
                 #print("rowsize=",rowsize)
                 #print("colsize=",colsize)
-
                 plt.scatter(x, y)
                 plt.xlabel(column1)
                 plt.ylabel(column2)
                 plt.title("{0} x {1}".format(column1, column2))
 
-                for poly_order in polyDeg:
-                    coefs = np.polyfit(x, y, poly_order)  # we also want to do this for 2, 3
-                    f = np.poly1d(coefs)
-                    xs, new_line = generate_points(f, min(x), max(x))
-                    plt.plot(xs, new_line, color="red")
-                    #plt.savefig("./my_plot.png")
-        plt.show()
+                coefs = np.polyfit(x, y, polyDeg)  # we also want to do this for 2, 3
+                f = np.poly1d(coefs)
+                xs, new_line = generate_points(f, min(x), max(x))
+                plt.plot(xs, new_line, color="red")
+                #plt.savefig("./my_plot.png")
+                plt.show()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('fileA')
