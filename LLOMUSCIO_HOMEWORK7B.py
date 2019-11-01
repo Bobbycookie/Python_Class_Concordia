@@ -47,7 +47,7 @@ def generate_points(coefs, min_val, max_val):
     xs = np.arange(min_val, max_val, (max_val-min_val)/100)
     return xs, np.polyval(coefs, xs)
 
-def plotting(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
+def plotting_pair(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
     if debug:
         number_combinations = 0
     if not debug:
@@ -72,7 +72,7 @@ def plotting(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
                 loc = i1*ncols + i2 + 1
                 plt.subplot(ncols, ncols, loc)
                 plt.scatter(x, y)
-                #plt.title("{0} x {1}".format(column1, column2))
+                plt.title("{0} x {1}".format(column1, column2))
 
                 for poly_order in polyDeg:
                     coefs = np.polyfit(x, y, poly_order)  # we also want to do this for 2, 3
@@ -81,22 +81,51 @@ def plotting(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
     #               plt.plot(xs, new_line)
                     plt.plot(xs, new_line, color="red")
                     #Uncomment this line for the pairs plot
-                    
-    
+                    #plt.show()
+                       
     if not debug:
-        # Note: I have spent no effort making it pretty, and recommend that you do :)
-        #plt.show()
         plt.legend()
-        #ax.tight_layout()
-        #plt.show()
         plt.savefig("./my_pairs_plot.png")
 
-#plotting(our_dictionary)
+def plot_regular(data, debug = False,rplot = False, polyDeg = [1,2,3,4]):
+    if debug:
+        number_combinations = 0
+    for column1 in our_dictionary.keys():
+        for column2 in our_dictionary.keys():
+            if debug:
+                number_combinations += 1
+                print(column1, column2)
+                # import pdb
+                # pdb.set_trace()
+            else:
+                x = our_dictionary[column1]
+                y = our_dictionary[column2]
+                rowsize = len(our_dictionary.keys())
+                colsize = len(our_dictionary.values())
+                #print("rowsize=",rowsize)
+                #print("colsize=",colsize)
+
+                plt.scatter(x, y)
+                plt.xlabel(column1)
+                plt.ylabel(column2)
+                plt.title("{0} x {1}".format(column1, column2))
+
+                for poly_order in polyDeg:
+                    coefs = np.polyfit(x, y, poly_order)  # we also want to do this for 2, 3
+                    f = np.poly1d(coefs)
+                    xs, new_line = generate_points(f, min(x), max(x))
+                    plt.plot(xs, new_line, color="red")
+                    #plt.savefig("./my_plot.png")
+        plt.show()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('fileA')
+#parser.add_argument('poly_order', type=int,
+                        #help="Set Poly Degree")
 parser.add_argument('-p', '--pplot', action="store_true",
                         help="only prints start of file")
+parser.add_argument('-r', '--rplot', action="store_true",
+                        help="only prints start of file")                
 #parser.add_argument("--plot", type=str, help="type plot to print a plot")
 args = parser.parse_args()
 
@@ -134,7 +163,18 @@ print (our_dictionary)
 
 debug = False
 
-plotting(our_dictionary,pplot=args.pplot)
+
+if args.pplot == True:
+    print ("pplot est printed)")
+    plotting_pair(our_dictionary)
+else:
+    print("pplot n'est pas printed")
+
+if args.rplot == True:
+    print("regular plot est printed")
+    plot_regular(our_dictionary)
+else:
+    print("regular plot n'est pas printed")
 
 with open("myfile.csv", "w") as myCSV:
     w = csv.DictWriter(myCSV, our_dictionary.keys())
