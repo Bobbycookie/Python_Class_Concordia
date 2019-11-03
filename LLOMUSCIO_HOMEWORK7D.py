@@ -4,6 +4,8 @@ import argparse
 import csv
 import matplotlib.pyplot as plt
 import numpy as np 
+import statistics 
+from statistics import mean,median,mode
 
 #I have used the diabetes.data file as dataset
 #ce fichier est celui avec le pair plot travailler sur celui la
@@ -117,12 +119,20 @@ def plot_regular(data, debug = False,rplot = False, polydeg = 0):
                 #plt.savefig("./my_plot.png")
                 plt.show()
 
-def plot_summary(data, debug = False,splot = False):
-    print(data)
+def plot_summary(data, debug = False,summary = False):
+    print(data.keys())
+    Col1 = input("choose a key: ",)
+    while Col1 not in data.keys():
+        Col1 = input("retry, choose a key: ",)
+    if Col1 in data.keys():
+            #print(data[Col1])
+            print("the max is:", max(data[Col1]))
+            print("the min is:", min(data[Col1]))
+            print("the mean is:", mean(data[Col1]))
 
 parser = argparse.ArgumentParser()
 parser.add_argument('fileA')
-parser.add_argument('--summary', action="store_true", help="Set Poly Degree")
+parser.add_argument('-s', '--summary', action="store_true", help="Set Poly Degree")
 parser.add_argument('-p', '--pplot', action="store_true", help="only prints start of file")
 parser.add_argument('-r', '--rplot', action="store_true", help="only prints start of file")                
 
@@ -185,7 +195,7 @@ else:
 #Summary check
 if args.summary == True:
     print("summary plot est printed")
-    plot_splot(our_dictionary)
+    plot_summary(our_dictionary)
 else:
     print("summary plot n'est pas printed")
 
