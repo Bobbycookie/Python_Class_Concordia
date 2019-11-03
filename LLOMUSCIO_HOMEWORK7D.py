@@ -2,6 +2,8 @@ import re
 import sys
 import argparse
 import csv
+import collections 
+from collections import Counter
 import matplotlib.pyplot as plt
 import numpy as np 
 import statistics 
@@ -48,6 +50,20 @@ def is_there_a_header(list_of_lists):
 def generate_points(coefs, min_val, max_val):
     xs = np.arange(min_val, max_val, (max_val-min_val)/100)
     return xs, np.polyval(coefs, xs)
+
+def discreete_data(data):
+    perc_disc = 0.10
+    maxnum = len(data)
+    data_unique = Counter(data)
+    single_num = len(data_unique.keys())
+    single_perc = float(single_num/maxnum)
+    print ("single",single_num)
+    #print("data unique", data_unique)
+    print("maxnum", maxnum)
+    if single_perc <= perc_disc: 
+        return True
+    else: 
+        return False
 
 def plotting_pair(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
     if debug:
@@ -129,13 +145,46 @@ def plot_summary(data, debug = False,summary = False):
             print("the max is:", max(data[Col1]))
             print("the min is:", min(data[Col1]))
             print("the mean is:", mean(data[Col1]))
+            discreete_data(data)
+            d_data = discreete_data(data)
+            print ("{} of your data is discreete".format(d_data))
+
+def interpolation(data, interpolation = False):
+    column1 = input("type name of first column: ",)
+    column2 = input("type name of second column: ",)
+    value_inp = input('enter a value: ',)
+    #poly_degree = int(input("Enter a degree for you polynomial (INT ONLY): ",))
+    
+    if column1 not in data.keys():
+        print("Column 1 is not in the list")
+        sys.exit()
+    elif column2 not in data.keys():
+        print("Column 2 is not in the list")
+        sys.exit()
+
+    x = data[column1]
+    y = data[column2]
+        # polynomial 1
+    d1 = np.polyfit(x, y, 1)
+    d1_val = np.polyval(d1, convert_type(value_inp))
+    print("Value 1: {}".format(d1_val))
+        # polynomial 2
+    d2 = np.polyfit(x, y, 2)
+    d2_val = np.polyval(d2, convert_type(value_inp))
+    print("Value 2: {}".format(d2_val))
+        # polynomial 3
+    d3 = np.polyfit(x, y, 3)
+    d3_val = np.polyval(d3, convert_type(value_inp))
+    #plt.plot(x,y,v3_val)
+    #plt.show()
+    print("Value 3: {}" .format(d3_val))
 
 parser = argparse.ArgumentParser()
 parser.add_argument('fileA')
-parser.add_argument('-s', '--summary', action="store_true", help="Set Poly Degree")
-parser.add_argument('-p', '--pplot', action="store_true", help="only prints start of file")
-parser.add_argument('-r', '--rplot', action="store_true", help="only prints start of file")                
-
+parser.add_argument('-s', '--summary', action="store_true", help="Type the key and displays Min/Max/Mean")
+parser.add_argument('-p', '--pplot', action="store_true", help="Save Pair Plot")
+parser.add_argument('-r', '--rplot', action="store_true", help="Display plot figure") 
+parser.add_argument('-i','--interpolation', action="store_true", help= "enter 2 columns name and 1 value, in this order!")               
 args = parser.parse_args()
 
 rows = []
@@ -171,10 +220,10 @@ for location, column_headings in enumerate(outer_list[0]):
 
 debug = False
 print(our_dictionary.keys())
-testKeyA = input("testKeyA= ",)
-testKeyB = input("testKeyB= ",)
-print("testA ", our_dictionary[testKeyA])
-print("testB ", our_dictionary[testKeyB])
+#testKeyA = input("testKeyA= ",)
+#testKeyB = input("testKeyB= ",)
+#print("testA ", our_dictionary[testKeyA])
+#print("testB ", our_dictionary[testKeyB])
 
 ################# Run a function based on argparse ####################
 
@@ -198,6 +247,14 @@ if args.summary == True:
     plot_summary(our_dictionary)
 else:
     print("summary plot n'est pas printed")
+
+#Summary check
+if args.interpolation == True:
+    print("Interpolation plot est printed")
+    interpolation(our_dictionary)
+else:
+    print("Interpolation plot n'est pas printed")
+
 
 with open("myfile.csv", "w") as myCSV:
     w = csv.DictWriter(myCSV, our_dictionary.keys())
