@@ -2,7 +2,6 @@ language: python
 
 install:
   - pip install matplotlib
-  
 python:
  - 3.6
  - 3.5
