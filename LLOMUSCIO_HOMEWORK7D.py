@@ -215,15 +215,8 @@ for location, column_headings in enumerate(outer_list[0]):
     for row in outer_list[1:]:
         our_dictionary[column_headings] += [row[location]]
 
-#print (our_dictionary)
-    # Add data values to the corresponding columns
-
 debug = False
 print(our_dictionary.keys())
-#testKeyA = input("testKeyA= ",)
-#testKeyB = input("testKeyB= ",)
-#print("testA ", our_dictionary[testKeyA])
-#print("testB ", our_dictionary[testKeyB])
 
 ################# Run a function based on argparse ####################
 
@@ -248,7 +241,7 @@ if args.summary == True:
 else:
     print("summary plot n'est pas printed")
 
-#Summary check
+#Interpolate check
 if args.interpolation == True:
     print("Interpolation plot est printed")
     interpolation(our_dictionary)
@@ -262,7 +255,7 @@ with open("myfile.csv", "w") as myCSV:
     w.writerow(our_dictionary)
 
 ###########################################################
-#unused code
+#UNUSED CODE
 #plotting(different_dictionary)
 #print(our_dictionary)
 #split each string in list to get a lis of list and I use the function checkdelim to see which delimiter is used
@@ -270,3 +263,9 @@ with open("myfile.csv", "w") as myCSV:
 # plt.xlabel(column1)
 # plt.ylabel(column2)
 #print(np.poly1d(f))
+#testKeyA = input("testKeyA= ",)
+#testKeyB = input("testKeyB= ",)
+#print("testA ", our_dictionary[testKeyA])
+#print("testB ", our_dictionary[testKeyB])
+#print (our_dictionary)
+    # Add data values to the corresponding columns

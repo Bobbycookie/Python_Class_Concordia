@@ -1,9 +1,16 @@
 language: python
 python:
-  - 2.7
-  - 3.4
-  - 3.5
-  - 3.6
-  - 3.7
+ - 3.6
+ - 3.5
+ - 3.7
 
+before_install:
+ - wget https://www4.stat.ncsu.edu/~boos/var.select/diabetes.rwrite1.txt
+ - mv diabetes.rwrite1.txt diabetes.data
 
+script:
+ - python3 LLOMUSCIO_HOMEWORK7D.py diabetes.data 
+ - python3 LLOMUSCIO_HOMEWORK7D.py diabetes.data --summary
+ - python3 LLOMUSCIO_HOMEWORK7D.py diabetes.data --pplot
+ - python3 LLOMUSCIO_HOMEWORK7D.py diabetes.data --rplot
+ - python3 LLOMUSCIO_HOMEWORK7D.py diabetes.data --interpolation
