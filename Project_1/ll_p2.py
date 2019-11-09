@@ -94,18 +94,18 @@ def plotting_pair(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
 
 def plot_regular(data,polydeg, activR = False):
     print("prouti debug")
-    for column1 in data.keys():
-        for column2 in data.keys():
-            x = data[column1]
-            y = data[column2]
+    for cols1 in data.keys():
+        for cols2 in data.keys():
+            x = data[cols1]
+            y = data[cols2]
             rowsize = len(data.keys())
             colsize = len(data.values())
                                 #print("rowsize=",rowsize)
                                 #print("colsize=",colsize)
             plt.scatter(x, y)
-            plt.xlabel(column1)
-            plt.ylabel(column2)
-            plt.title("{0} x {1}".format(column1, column2))
+            plt.xlabel(cols1)
+            plt.ylabel(cols2)
+            plt.title("{0} x {1}".format(cols1, cols2))
 
             coefs = np.polyfit(x, y, polydeg)  # we also want to do this for 2, 3
             f = np.poly1d(coefs)
@@ -160,10 +160,16 @@ def interpolation(data, interpolate, activI = False):
         #plt.show()
         print("Value 3: {}" .format(d3_val))
 
+def plotClass (data, cols, cat_class):
+    for cat_class in data.keys():
+        SortC = data[cat_class]
+        
 
 parser = argparse.ArgumentParser()
 parser.add_argument('fileA')
 parser.add_argument('activdef', type = str)
+parser.add_argument("--cols", nargs = 3, type = str)
+parser.add_argument("--class", type=str)
 parser.add_argument('-s', '--summary', type = str, help="Type the key and displays Min/Max/Mean")
 parser.add_argument('-p', '--pplot', action="store_true", help="Save Pair Plot")
 parser.add_argument('-r', '--rplot', type = int, help="Display plot figure") 
@@ -228,7 +234,7 @@ else :
 #Only Plotting 
 if args.activdef == "R":
     print("Regular plot is printed")
-    plot_regular(our_dictionary,polydeg = args.rplot)
+    plot_regular(our_dictionary,polydeg = args.rplot, cols = args.cols)
 else: 
     print("Regular plot is inactive")
 
