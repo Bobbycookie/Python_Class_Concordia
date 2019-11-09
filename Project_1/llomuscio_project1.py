@@ -105,7 +105,7 @@ def plotting_pair(data, debug = False,pplot = False, polyDeg = [1,2,3,4]):
         plt.savefig("./my_pairs_plot.png")
 
 def plot_regular(data,polydeg):
-    if debug:
+    
         number_combinations = 0
         for column1 in our_dictionary.keys():
             for column2 in our_dictionary.keys():
